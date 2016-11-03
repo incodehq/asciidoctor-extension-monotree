@@ -22,6 +22,14 @@ if [ $? != 0 ]; then
 fi
 
 
+echo ""
+echo "bumping version to $RELEASE_VERSION"
+echo ""
+sh ./bumpver.sh $RELEASE_VERSION
+if [ $? != 0 ]; then
+    echo "... failed" >&2
+    exit 1
+fi
 
 echo ""
 echo "releasing (mvn clean deploy -P release)"
