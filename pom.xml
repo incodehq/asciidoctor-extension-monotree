@@ -10,6 +10,9 @@
 
 
     <name>Incode Asciidoctor Monotree extension</name>
+	<description>
+		Extension for Asciidoctor that provides the 'monotree' block, converting ascii to a simplified representation of a directory listing.
+	</description>
     
     <url>https://github.com/incodehq/asciidoctor-extension-monotree</url>
     <licenses>
