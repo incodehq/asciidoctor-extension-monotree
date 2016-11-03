@@ -31,6 +31,8 @@ public class MonoTreeProcessor extends BlockProcessor {
 	public static final String SYMBOL_SET_FANCY = "fancy";
 	public static final String SYMBOL_SET_SIMPLE = "simple";
 
+	public static final char[] INDENT_CHARS = { '>', '#', '-', '+', '.' };
+
 	private final Map<String, Map<LaneState, String>> definedSymbolSets;
 
 	public MonoTreeProcessor(String name, Map<String, Object> config) {
@@ -102,7 +104,8 @@ public class MonoTreeProcessor extends BlockProcessor {
 		List<TreeLine> treeLines = new ArrayList<>();
 		for (String line : reader.readLines()) {
 			int offset = computeLevel(line);
-			treeLines.add(new TreeLine(offset - 1, line.substring(offset + 1)));
+			final String substring = line.substring(Math.min(line.length(), offset + 1));
+			treeLines.add(new TreeLine(offset - 1, substring));
 		}
 
 		Map<LaneState, String> symbolSet = createSymbolSet(attributes);
@@ -124,10 +127,30 @@ public class MonoTreeProcessor extends BlockProcessor {
 
 	private static int computeLevel(String line) {
 		int i = 0;
-		while (line.charAt(i) == '>' && i < line.length()) {
+
+		boolean[] allowSpace = {true};
+		while (matchesIndentChar(line, i, allowSpace) && i < line.length()) {
 			i++;
 		}
 		return i;
+	}
+
+	private static boolean matchesIndentChar(final String line, final int i, final boolean[] allowSpace) {
+		if(i >= line.length()) {
+			return false;
+		}
+		final char c = line.charAt(i);
+		for (char indentChar : INDENT_CHARS) {
+			if (c == indentChar) {
+				allowSpace[0] = false;
+				return true;
+			}
+		}
+		if(c == ' ' && allowSpace[0]) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public static LaneState[][] computeLanes(List<TreeLine> lines) {

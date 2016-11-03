@@ -9,6 +9,6 @@ public class MonoTreeExtension implements ExtensionRegistry {
 	@Override
 	public void register(Asciidoctor asciidoctor) {
 		JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
-		javaExtensionRegistry.block("tree", MonoTreeProcessor.class);
+		javaExtensionRegistry.block("monotree", MonoTreeProcessor.class);
 	}
 }
